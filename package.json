@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "feynity backend",
+  "main": "index.js",
+  "author": "Alaa Lahmar",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "neo4j-driver": "^4.2.3",
+    "neode": "^0.4.7"
+  },
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
