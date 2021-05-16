@@ -4,7 +4,7 @@
 
 const verifyEmail = require('../helpers/learnerHelper').verifyEmail;
 
-const validateSignup = (req,res,Learner) => {
+const validateSignup = (req) => {
     
     /*
      * Verify User Sign Up
@@ -23,7 +23,7 @@ const validateSignup = (req,res,Learner) => {
 }
 
 
-const validateSignin = (req, res) => {
+const validateSignin = (req) => {
     // retrieving data
     const {email, password} = req.body;
     // check empty credentials
@@ -34,6 +34,29 @@ const validateSignin = (req, res) => {
     return true
 }
 
+const validateUpdate = (req,bcrypt) => {
+    const {email, name, password, rpassword} = req.body;
+    const user = {};
+
+    if (email && verifyEmail(email) && (email !== req.learner.email)) {
+        user.email = email
+    }
+    if (name) {
+        user.name = name
+    }
+    if (password && (password === rpassword)) {
+        const salt = bcrypt.genSaltSync(10);
+        const password_hash = bcrypt.hashSync(password, salt);
+        user.password_hash = password_hash
+    }
+
+    if (!(user.hasOwnProperty('email') || user.hasOwnProperty('name') || user.hasOwnProperty('password_hash'))) {
+        return null
+    }
+
+    return user
+}
+
 module.exports = {
-    validateSignin, validateSignup
+    validateSignin, validateSignup, validateUpdate
 }

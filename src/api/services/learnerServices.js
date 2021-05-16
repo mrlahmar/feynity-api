@@ -1,3 +1,5 @@
+const { validateUpdate } = require("../validations/learnerValidator");
+
 const findOneLearner = async (req,res,Learner) => {
     try {
         const result = await Learner.findOne({
@@ -28,7 +30,7 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
         })
 
         const accessToken = jwt.sign(
-                                        {learner: learner.dataValues.email}, 
+                                        {email: learner.dataValues.email}, 
                                         process.env.ACCESS_TOKEN_SECRET,
                                         {expiresIn: 3600}
                                     )
@@ -66,7 +68,7 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
         }
 
         const accessToken = jwt.sign(
-                                        {learner: learner.dataValues.email}, 
+                                        {email: learner.dataValues.email}, 
                                         process.env.ACCESS_TOKEN_SECRET,
                                         {expiresIn: 3600}
                                     )
@@ -84,6 +86,47 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
     }
 }
 
+const updateLearner = async (req,res,Learner,bcrypt) => {
+    // validate data and return data to be updated
+    const newLearner = validateUpdate(req,bcrypt)
+
+    if (newLearner === null) {
+        res.status(400).json('Unable to update information')
+    }
+
+    try{
+        const result = await Learner.update(
+            newLearner, 
+            {
+                where: {
+                    email: req.learner.email
+                }
+            }
+        )
+        res.json(200).json({msg: 'Success Updating', result})
+    } catch(e) {
+        res.status(400).json({msg: 'Erreur Updating'})
+    }
+}
+
+const deleteLearner = async (req,res,Learner) => {
+    try {
+        const result = await Learner.delete({
+            where: {
+                email: req.learner.email
+            }
+        })
+
+        if(result === 0) {
+            res.status(401).json({msg: 'User Dosen\'t exists'})
+        } 
+
+        res.status(200).json({msg: 'User Deleted Successfully'})
+    } catch(e) {
+        res.status(400).json({msg: 'Error Deleting User'})
+    }
+}
+
 module.exports = {
-    findOneLearner, createOneLearner, checkSignin
+    findOneLearner, createOneLearner, checkSignin, updateLearner, deleteLearner
 }

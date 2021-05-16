@@ -4,7 +4,7 @@ const learnerServices = require('../services/learnerServices')
 
 const signup = async (req,res,Learner,jwt) => {
     // Validate User Info
-    if(!learnerValidator.validateSignup(req,res,Learner)) {
+    if(!learnerValidator.validateSignup(req)) {
         res.status(400).json('Unable to Submit Form')
     }
 
@@ -16,31 +16,23 @@ const signup = async (req,res,Learner,jwt) => {
     await learnerServices.createOneLearner(req,res,Learner,bcrypt,jwt)
 }
 
-const signin = async(req, res, Learner, jwt) => {
+const signin = async (req, res, Learner, jwt) => {
     // Validate User Info
-    if(!learnerValidator.validateSignin(req,res,Learner)) {
+    if(!learnerValidator.validateSignin(req)) {
         res.status(400).json('Unable to Submit Form')
     }
 
     await learnerServices.checkSignin(req,res,Learner,bcrypt,jwt)
 }
 
-const update = (req, res, Learner) => {
-    const learner = req.learner
-    res.status(200).json({msg: 'Authentification Works', learner});
+const update = async (req, res, Learner) => {
+    await learnerServices.updateLearner(req,res,Learner,bcrypt)
 }
 
-const _delete = (req, res, Learner) => {
+const _delete = async (req, res, Learner) => {
+    await learnerServices.deleteLearner(req,res,Learner)
 }
 
 module.exports = {
     signin, signup, update, _delete
 }
-
-/* 
-    Pseudo Code for Sign In
-    1. Validation, DONE
-    2. User Exists or Not (verify both email and password)
-    3. If user info is correct, JWT
-    4. HTTP requests
-*/

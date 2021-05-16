@@ -19,11 +19,11 @@ router.post('/signup', (req,res) => learnerController.signup(req,res,Learner,jwt
 // @route POST api/v1/learners/update
 // @desc Update the profile information
 // @access Private
-router.post('/update', auth, (req,res) => learnerController.update(req,res,Learner))
+router.patch('/update', auth, (req,res) => learnerController.update(req,res,Learner))
 
 // @route POST api/v1/learners/delete
 // @desc Delete my profile
 // @access Private
-router.post('/delete', (req,res) => learnerController._delete(req,res,Learner))
+router.delete('/delete', auth, (req,res) => learnerController._delete(req,res,Learner))
 
 module.exports = router;
