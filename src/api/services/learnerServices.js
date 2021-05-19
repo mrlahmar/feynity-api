@@ -35,7 +35,7 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
                                         {expiresIn: 3600}
                                     )
         
-        res.status(200).json({
+        return res.status(200).json({
                                 msg: 'Sign Up Successfull', 
                                 learner: {
                                     email: learner.dataValues.email,
@@ -44,7 +44,7 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
                                 accessToken
                             })
     } catch(e) {
-        res.status(400).json({msg: 'Sign Up Error'})
+        return res.status(400).json({msg: 'Sign Up Error'})
     }
 }
 
