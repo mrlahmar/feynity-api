@@ -33,6 +33,10 @@ const _delete = async (req, res, Learner) => {
     await learnerServices.deleteLearner(req,res,Learner)
 }
 
+const get = async (req,res,Learner) => {
+    await learnerServices.getLearner(req,res,Learner)
+}
+
 module.exports = {
-    signin, signup, update, _delete
+    signin, signup, update, _delete, get
 }

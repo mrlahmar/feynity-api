@@ -26,4 +26,9 @@ router.patch('/update', auth, (req,res) => learnerController.update(req,res,Lear
 // @access Private
 router.delete('/delete', auth, (req,res) => learnerController._delete(req,res,Learner))
 
+// @route POST api/v1/learners/get
+// @desc Get user data
+// @access Private
+router.post('/get', auth, (req,res) => learnerController.get(req,res,Learner))
+
 module.exports = router;

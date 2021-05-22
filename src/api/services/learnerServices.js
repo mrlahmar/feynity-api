@@ -31,15 +31,15 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
 
         const accessToken = jwt.sign(
                                         {email: learner.dataValues.email}, 
-                                        process.env.ACCESS_TOKEN_SECRET,
-                                        {expiresIn: 3600}
+                                        process.env.ACCESS_TOKEN_SECRET
                                     )
         
         return res.status(200).json({
                                 msg: 'Sign Up Successfull', 
                                 learner: {
                                     email: learner.dataValues.email,
-                                    name: learner.dataValues.name
+                                    name: learner.dataValues.name,
+                                    points: learner.dataValues.points
                                 },
                                 accessToken
                             })
@@ -64,20 +64,20 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
         }
 
         if (!bcrypt.compareSync(password, learner.dataValues.password_hash)) {
-            res.status(400).json({msg: 'Wrong Credentials 2'})
+            res.status(400).json({msg: 'Wrong Credentials'})
         }
 
         const accessToken = jwt.sign(
                                         {email: learner.dataValues.email}, 
-                                        process.env.ACCESS_TOKEN_SECRET,
-                                        {expiresIn: 3600}
+                                        process.env.ACCESS_TOKEN_SECRET
                                     )
 
         res.status(200).json({
                                 msg: 'Sign In Successfull', 
                                 learner: {
                                     email: learner.dataValues.email,
-                                    name: learner.dataValues.name
+                                    name: learner.dataValues.name,
+                                    points: learner.dataValues.points
                                 },
                                 accessToken
                             })
@@ -127,6 +127,33 @@ const deleteLearner = async (req,res,Learner) => {
     }
 }
 
+const getLearner = async (req,res,Learner) => {
+    const email = req.learner.email;
+
+    try{
+        const learner = await Learner.findOne({
+            where: {
+                email
+            }
+        })
+
+        if(learner === null) {
+            res.status(400).json({msg: 'Something went wrong'})
+        }
+
+        res.status(200).json({
+                                learner: {
+                                    email: learner.dataValues.email,
+                                    name: learner.dataValues.name,
+                                    points: learner.dataValues.points
+                                }
+                            })
+    } catch(e) {
+        res.status(400).json({msg: 'Something went wrong'})
+    }
+}
+
+
 module.exports = {
-    findOneLearner, createOneLearner, checkSignin, updateLearner, deleteLearner
+    findOneLearner, createOneLearner, checkSignin, updateLearner, deleteLearner, getLearner
 }
