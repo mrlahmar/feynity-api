@@ -44,7 +44,7 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
                                 accessToken
                             })
     } catch(e) {
-        return res.status(400).json({msg: 'Sign Up Error'})
+        return res.status(500).json({msg: 'Sign Up Error'})
     }
 }
 
@@ -103,9 +103,9 @@ const updateLearner = async (req,res,Learner,bcrypt) => {
                 }
             }
         )
-        res.json(200).json({msg: 'Success Updating', result})
+        res.status(200).json({msg: 'Success Updating', result})
     } catch(e) {
-        res.status(400).json({msg: 'Erreur Updating'})
+        res.status(500).json({msg: 'Erreur Updating'})
     }
 }
 
