@@ -14,7 +14,7 @@ const auth = (req,res,next) => {
         req.learner = decoded
         next()
     } catch(e) {
-        res.status(401).json({msg: 'Token is not valid'})
+        return res.status(401).json({msg: 'Token is not valid'})
     }
 }
 

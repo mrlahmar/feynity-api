@@ -35,8 +35,7 @@ const createOneLearner = async (req,res,Learner,bcrypt,jwt) => {
                                     )
         
         return res.status(200).json({
-                                msg: 'Sign Up Successfull', 
-                                learner: {
+                                userData: {
                                     email: learner.dataValues.email,
                                     name: learner.dataValues.name,
                                     points: learner.dataValues.points
@@ -60,11 +59,11 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
         })
 
         if(learner === null) {
-            res.status(400).json({msg: 'Wrong Credentials'})
+            return res.status(404).json({msg: 'Wrong Credentials'})
         }
 
         if (!bcrypt.compareSync(password, learner.dataValues.password_hash)) {
-            res.status(400).json({msg: 'Wrong Credentials'})
+            return res.status(404).json({msg: 'Wrong Credentials'})
         }
 
         const accessToken = jwt.sign(
@@ -72,9 +71,8 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
                                         process.env.ACCESS_TOKEN_SECRET
                                     )
 
-        res.status(200).json({
-                                msg: 'Sign In Successfull', 
-                                learner: {
+        return res.status(200).json({
+                                userData: {
                                     email: learner.dataValues.email,
                                     name: learner.dataValues.name,
                                     points: learner.dataValues.points
@@ -82,7 +80,7 @@ const checkSignin = async (req,res,Learner,bcrypt,jwt) => {
                                 accessToken
                             })
     } catch(e) {
-        res.status(400).json({msg: 'Sign In Error'})
+        return res.status(500).json({msg: 'Something went wrong'})
     }
 }
 
@@ -91,7 +89,7 @@ const updateLearner = async (req,res,Learner,bcrypt) => {
     const newLearner = validateUpdate(req,bcrypt)
 
     if (newLearner === null) {
-        res.status(400).json('Unable to update information')
+        return res.status(400).json('Unable to update information')
     }
 
     try{
@@ -103,9 +101,9 @@ const updateLearner = async (req,res,Learner,bcrypt) => {
                 }
             }
         )
-        res.status(200).json({msg: 'Success Updating', result})
+        return res.status(200).json({msg: 'Success Updating', result})
     } catch(e) {
-        res.status(500).json({msg: 'Erreur Updating'})
+        return res.status(500).json({msg: 'Erreur Updating'})
     }
 }
 
@@ -118,12 +116,12 @@ const deleteLearner = async (req,res,Learner) => {
         })
 
         if(result === 0) {
-            res.status(401).json({msg: 'User Dosen\'t exists'})
+            return res.status(403).json({msg: 'User Dosen\'t exists'})
         } 
 
-        res.status(200).json({msg: 'User Deleted Successfully'})
+        return res.status(200).json({msg: 'User Deleted Successfully'})
     } catch(e) {
-        res.status(400).json({msg: 'Error Deleting User'})
+        return res.status(500).json({msg: 'Something went wrong'})
     }
 }
 
@@ -138,18 +136,18 @@ const getLearner = async (req,res,Learner) => {
         })
 
         if(learner === null) {
-            res.status(400).json({msg: 'Something went wrong'})
+            return res.status(401).json({msg: 'Something went wrong'})
         }
 
-        res.status(200).json({
-                                learner: {
+        return res.status(200).json({
+                                userData: {
                                     email: learner.dataValues.email,
                                     name: learner.dataValues.name,
                                     points: learner.dataValues.points
                                 }
                             })
     } catch(e) {
-        res.status(400).json({msg: 'Something went wrong'})
+        return res.status(500).json({msg: 'Something went wrong'})
     }
 }
 

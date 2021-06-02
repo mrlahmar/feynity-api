@@ -5,12 +5,12 @@ const learnerServices = require('../services/learnerServices')
 const signup = async (req,res,Learner,jwt) => {
     // Validate User Info
     if(!learnerValidator.validateSignup(req)) {
-        return res.status(400).json({msg: 'Unable to Submit Form'})
+        return res.status(403).json({msg: 'Wrong Credentials'})
     }
 
     // Check User Existence
     if(! await learnerServices.findOneLearner(req,res,Learner)) {
-        return res.status(400).json({msg: 'Learner Already Exists'})
+        return res.status(403).json({msg: 'Something went wrong'})
     }
 
     await learnerServices.createOneLearner(req,res,Learner,bcrypt,jwt)
@@ -19,7 +19,7 @@ const signup = async (req,res,Learner,jwt) => {
 const signin = async (req, res, Learner, jwt) => {
     // Validate User Info
     if(!learnerValidator.validateSignin(req)) {
-        res.status(400).json('Unable to Submit Form')
+        return res.status(403).json('Unable to Submit Form')
     }
 
     await learnerServices.checkSignin(req,res,Learner,bcrypt,jwt)
