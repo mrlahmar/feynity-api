@@ -1,5 +1,5 @@
 const {validateCourse} = require('../validations/courseValidator')
-const {addCourse} = require('../services/courseServices')
+const {addCourse, fetchCourses, fetchCourseById} = require('../services/courseServices')
 
 // add a course to the library
 const add = async (req,res,Course) => {
@@ -16,11 +16,20 @@ const add = async (req,res,Course) => {
     //res.status(200).json({msg: 'Ahla bik'})
 }
 
+
+
 // fetch all courses from the database
 const getall = async (req,res,Course) => {
+    // fetch all courses
+    await fetchCourses(res,Course)
+}
 
+// fetch a course by id
+const getById = async (req,res,Course) => {
+    // fetch a course by id
+    await fetchCourseById(req,res,Course)
 }
 
 module.exports = {
-    getall, add
+    getall, add, getById
 }

@@ -3,6 +3,10 @@ const config = require('../../config/dbConfig')
 const Courses = config.ModelFactory({
     label: 'Course',
     schema: {
+        id: {
+            type: 'number',
+            required: true
+        },
         title: {
             type: 'string',
             minLength: 5,
@@ -23,9 +27,13 @@ const Courses = config.ModelFactory({
         description: {
             type: 'string',
             required: true
+        },
+        number_of_students: {
+            type: 'number',
+            required: true
         }
     },
-    primaryKeyField: 'title',
+    primaryKeyField: 'id',
     relationshipCreationKeys: {},
 }, config.neogma);
 
