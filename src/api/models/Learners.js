@@ -1,4 +1,5 @@
-const config = require('../../config/dbConfig')
+const config = require('../../config/dbConfig');
+const { Courses } = require('./Courses');
 
 const Learners = config.ModelFactory({
     label: 'Learner',
@@ -20,6 +21,33 @@ const Learners = config.ModelFactory({
             type: 'number',
             default: 0
         }
+    },
+    relationships: {
+      Courses: {
+        model: Courses,
+        direction: 'out',
+        name: 'TOOK',
+        properties: {
+            Date: {
+                property: 'date',
+                schema: {
+                    type: 'string'
+                }
+            },
+            Progress: {
+                property: 'progress',
+                schema: {
+                    type: 'number'
+                }
+            },
+            Completed: {
+                property: 'completed',
+                schema: {
+                    type: 'boolean'
+                }
+            }
+        }
+      }  
     },
     primaryKeyField: 'email',
     relationshipCreationKeys: {},

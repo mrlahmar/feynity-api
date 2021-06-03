@@ -1,5 +1,5 @@
 const {validateCourse} = require('../validations/courseValidator')
-const {addCourse, fetchCourses, fetchCourseById} = require('../services/courseServices')
+const {addCourse, fetchCourses, fetchCourseById, takeCourse, fetchMyCourses} = require('../services/courseServices')
 
 // add a course to the library
 const add = async (req,res,Course) => {
@@ -26,6 +26,17 @@ const getById = async (req,res,Course) => {
     await fetchCourseById(req,res,Course)
 }
 
+
+// take a course
+const take = async (req,res,Learner,Course) => {
+    await takeCourse(req,res,Learner,Course)
+}
+
+// get my courses
+const getMyCourses = async (req,res,Learner,Course) => {
+    await fetchMyCourses(req,res,Learner,Course)
+}
+
 module.exports = {
-    getall, add, getById
+    getall, add, getById, take, getMyCourses
 }

@@ -1,4 +1,4 @@
-const { Neogma, ModelFactory } = require('neogma');
+const { Neogma, ModelFactory, QueryRunner } = require('neogma');
 
 /* --> create a neogma instance and database connection */
 const neogma = new Neogma(
@@ -13,6 +13,11 @@ const neogma = new Neogma(
     }
 );
 
+const queryRunner = new QueryRunner({
+    driver: neogma.driver,
+    logger: console.log
+})
+
 module.exports = {
-    ModelFactory, neogma
+    ModelFactory, neogma, queryRunner
 }
