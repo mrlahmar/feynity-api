@@ -1,4 +1,4 @@
-const validateCourse = (req) => {
+const validateCourse = async (req, Course) => {
     // do it basic, after do link and platform check
     const {title, platform, link, provider, description} = req.body
 
@@ -8,10 +8,27 @@ const validateCourse = (req) => {
     }
 
     // verify platforms
+    if (platform !== 'Udemy' && platform !== 'edX' && platform !== 'Coursera' && platform !== 'Linkedin Learning') {
+        return false
+    }
+
     // verify links
+    if (platform === 'Udemy' && !link.includes('udemy.com')) {
+        return false
+    }
 
-    
+    if (platform === 'edX' && !link.includes('edx.org')) {
+        return false
+    }
 
+    if (platform === 'Linkedin Learning' && !link.includes('linkedin.com/learning')) {
+        return false
+    }
+
+    if (platform === 'Coursera' && !link.includes('coursera.org')) {
+        return false
+    }
+  
     return true
 }
 

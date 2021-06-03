@@ -4,16 +4,12 @@ const {addCourse, fetchCourses, fetchCourseById} = require('../services/courseSe
 // add a course to the library
 const add = async (req,res,Course) => {
     // validate course info
-    if(!validateCourse(req)) {
+    if(!validateCourse(req,Course)) {
         return res.status(400).json({msg: "Unable to save course"})
     }
-
-    // check if the course already exists
-
+    
     // create course
     await addCourse(req,res,Course)
-
-    //res.status(200).json({msg: 'Ahla bik'})
 }
 
 
