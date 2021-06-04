@@ -32,4 +32,24 @@ router.post('/take', auth, (req,res) => courseController.take(req,res,Learner,Co
 // @access Private
 router.post('/getMyCourses', auth, (req,res) => courseController.getMyCourses(req,res,Learner,Course))
 
+// @route POST api/v1/courses/getMyCourses
+// @desc Get learners courses
+// @access Private
+router.post('/getMyCoursesWithProgress', auth, (req,res) => courseController.getMyCoursesWithProgress(req,res,Learner,Course))
+
+// @route PATCH api/v1/courses/updateProgress
+// @desc Get learners courses
+// @access Private
+router.patch('/updateProgress', auth, (req,res) => courseController.updateProgress(req,res,Learner,Course))
+
+// @route DELETE api/v1/courses/quit
+// @desc Quit course
+// @access Private
+router.delete('/quit', auth, (req,res) => courseController.quitCourse(req,res,Learner,Course))
+
+// @route POST api/v1/courses/checkTook
+// @desc Check if a learner is taking a course
+// @access Private
+router.post('/check', auth, (req,res) => courseController.checkTook(req,res,Learner,Course))
+
 module.exports = router;

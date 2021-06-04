@@ -1,5 +1,7 @@
 const {validateCourse} = require('../validations/courseValidator')
-const {addCourse, fetchCourses, fetchCourseById, takeCourse, fetchMyCourses} = require('../services/courseServices')
+const {addCourse, fetchCourses, fetchCourseById, takeCourse,
+        fetchMyCourses, fetchMyCoursesWithProgress, updateCourseProgress,
+        removeTookCourse, checkTookCourse} = require('../services/courseServices')
 
 // add a course to the library
 const add = async (req,res,Course) => {
@@ -37,6 +39,26 @@ const getMyCourses = async (req,res,Learner,Course) => {
     await fetchMyCourses(req,res,Learner,Course)
 }
 
+// get my courses with progress
+const getMyCoursesWithProgress = async (req,res,Learner,Course) => {
+    await fetchMyCoursesWithProgress(req,res,Learner,Course)
+}
+
+// update course progress
+const updateProgress = async (req,res,Learner,Course) => {
+    await updateCourseProgress(req,res,Learner,Course)
+}
+
+// quit course
+const quitCourse = async (req,res,Learner,Course) => {
+    await removeTookCourse(req,res,Learner,Course)
+}
+
+// check if a learner is taking a course
+const checkTook = async (req,res,Learner,Course) => {
+    await checkTookCourse(req,res,Learner,Course)
+}
+
 module.exports = {
-    getall, add, getById, take, getMyCourses
+    getall, add, getById, take, getMyCourses, getMyCoursesWithProgress, updateProgress, quitCourse, checkTook
 }

@@ -62,6 +62,26 @@ const fetchCourseById = async (req,res,Course) => {
     }
 }
 
+const checkTookCourse = async (req,res,Learner,Course) => {
+    try {
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:TOOK]->(c:Course) WHERE l.email = $email AND c.id = $id RETURN r',
+            {
+                email: req.learner.email,
+                id: req.body.id
+            }
+        )
+
+        if (result.records.map(rel => rel.get('r').properties).length === 0) {
+            return res.status(200).json({msg: "Success"})
+        }
+        return res.status(403).json({msg: "Forbidden"})
+
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})   
+    }
+}
+
 const takeCourse = async (req,res,Learner,Course) => {
     const {courseId} = req.body
 
@@ -85,8 +105,6 @@ const takeCourse = async (req,res,Learner,Course) => {
                 }
             }
         )
-
-        // to throw error if relation already exists
 
         // update course number of students
         const nstudents_old = await Course.findOne({
@@ -127,6 +145,93 @@ const fetchMyCourses = async (req,res,Learner,Course) => {
     }
 }
 
+const fetchMyCoursesWithProgress = async (req,res,Learner,Course) => {
+    try {
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:TOOK]->(c:Course) WHERE l.email= $email RETURN c, r',
+            {
+                email: req.learner.email
+            }
+        )
+        return res.status(200).json(result.records.map
+            (
+                course => {
+                    return (
+                        {
+                            course: course.get('c').properties,
+                            relationData: course.get('r').properties
+                        }
+                    )
+                }
+            )
+        )
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})   
+    }
+}
+
+const updateCourseProgress = async (req,res,Learner,Course) => {
+    try {
+        const result = await Learner.updateRelationship(
+            {
+                progress: req.body.progress
+            },
+            {
+                alias: 'Courses',
+                where: {
+                    source: {
+                        email: req.learner.email
+                    },
+                    target: {
+                        id: req.body.id
+                    }
+                }
+            }
+        )
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})
+    }
+}
+
+// quit course
+const removeTookCourse = async (req,res,Learner,Course) => {
+    try {
+        await queryRunner.run(
+            'MATCH (l:Learner)-[r:TOOK]->(c:Course) WHERE l.email = $email AND c.id = $id DELETE r RETURN l,c',
+            {
+                email: req.learner.email,
+                id: req.body.id
+            }
+        )
+
+        // update course number of students
+        const nstudents_old = await Course.findOne({
+            where: {
+                id: req.body.id
+            }
+        })
+
+        const number_of_students = nstudents_old.dataValues.number_of_students - 1
+        await Course.update(
+            {
+                number_of_students
+            },
+            {
+                where: {
+                    id: req.body.id
+                }
+            }
+        )
+
+        return res.status(200).json({msg: "Course removed successfully"})
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})   
+    }
+}
+
 module.exports = {
-    addCourse, fetchCourses, fetchCourseById, takeCourse, fetchMyCourses
+    addCourse, fetchCourses, fetchCourseById, takeCourse,
+    fetchMyCourses, fetchMyCoursesWithProgress, updateCourseProgress,
+    removeTookCourse, checkTookCourse
 }
