@@ -1,5 +1,6 @@
 const config = require('../../config/dbConfig');
 const { Courses } = require('./Courses');
+const { Groups } = require('./Groups');
 
 const Learners = config.ModelFactory({
     label: 'Learner',
@@ -47,7 +48,15 @@ const Learners = config.ModelFactory({
                 }
             }
         }
-      }  
+      },
+      Groups: {
+        model: Groups,
+        direction: 'out',
+        name: 'JOINED',
+        properties: {
+            
+        }
+      }
     },
     primaryKeyField: 'email',
     relationshipCreationKeys: {},
