@@ -68,4 +68,99 @@ const myGroups = async (req,res,Group,Learner,Course) => {
     }
 }
 
-module.exports = {createGroup, myGroups}
+const fetchGroups = async (req,res,Group) => {
+    try {
+        // fetch all groups
+        const results = await Group.findMany()
+        // parse data
+        let groups = results.map(results => results.dataValues)
+        return res.status(200).json(groups)
+    } catch (error) {
+        // catch error
+        return res.status(500).json({msg: "Something went wrong"})
+    }
+}
+
+const fetchGroupById = async (req,res,Group) => {
+    try {
+        // parse id to string
+        const id = parseInt(req.params.id)
+        // find the group by id
+        const result = await Group.findOne({
+            where: {
+                id
+            }
+        })
+
+        // parse data
+        const group = result.dataValues
+        return res.status(200).json(group)
+    } catch (error) {
+        // catch error
+        return res.status(500).json({msg: "Something went wrong"})
+    }
+}
+
+// check if a learner joined a group or not
+const checkLearnerJoined = async (req,res,Group) => {
+    try {
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:JOINED]->(g:Group) WHERE l.email= $email AND g.id = $groupid RETURN g',
+            {
+                email: req.learner.email,
+                groupid: req.body.groupid
+            }
+        )
+        
+        return res.status(200).json({joined: result.records.map(group => group.get('g').properties).length > 0})
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})   
+    }
+}
+
+// a learner joins a group
+const joinGroup = async (req,res,Learner,Group) => {
+    const {groupid} = req.body
+
+    try {
+        // add relation
+        const rel = await Learner.relateTo(
+            {
+                alias: 'Groups',
+                where: {
+                    source: {
+                        email: req.learner.email
+                    },
+                    target: {
+                        id: groupid
+                    }
+                }
+            }
+        )
+
+        // update course number of members
+        const nmembers_old = await Group.findOne({
+            where: {
+                id: groupid
+            }
+        })
+
+        const number_of_members = nmembers_old.dataValues.number_of_members + 1
+        const crs = await Group.update(
+            {
+                number_of_members
+            },
+            {
+                where: {
+                    id: groupid
+                }
+            }
+        )
+
+        return res.status(200).json({msg: 'Learner joined the group successfully'})
+    } catch (error) {
+        return res.status(500).json({msg: 'Something went wrong'})
+    }
+}
+
+module.exports = {createGroup, myGroups, fetchGroups, fetchGroupById, checkLearnerJoined, joinGroup}

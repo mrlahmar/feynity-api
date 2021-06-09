@@ -18,6 +18,31 @@ const showMyGroups = async (req,res,Group,Learner,Course) => {
     await groupServices.myGroups(req,res,Group)
 }
 
+// get all groups
+const getall = async (req,res,Group) => {
+    await groupServices.fetchGroups(req,res,Group)
+}
+
+// get a group by its id
+const getById = async (req,res,Group) => {
+    await groupServices.fetchGroupById(req,res,Group)
+}
+
+// check if a learner joined a group or not
+const checkJoined = async (req,res,Group) => {
+    await groupServices.checkLearnerJoined(req,res,Group)
+}
+
+// get the groups of a specific course
+const getGroupsByCourseId = async () => {
+
+}
+
+// a learner joins a group
+const join = async (req,res,Learner,Group) => {
+    await groupServices.joinGroup(req,res,Learner,Group)
+}
+
 module.exports = {
-    create, showMyGroups
+    create, showMyGroups, getall, getById, checkJoined, getGroupsByCourseId, join
 }

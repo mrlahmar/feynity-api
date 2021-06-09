@@ -19,4 +19,29 @@ router.post('/create', auth ,(req,res) => groupController.create(req,res,Group,L
 // @access Private
 router.post('/mygroups', auth ,(req,res) => groupController.showMyGroups(req,res,Group,Learner,Course))
 
+// @route GET api/v1/groups/getall
+// @desc Get all groups
+// @access Public
+router.get('/getall', (req,res) => groupController.getall(req,res,Group))
+
+// @route GET api/v1/groups/getById:id
+// @desc Get a group information by its id
+// @access Public
+router.get('/getById/:id', (req,res) => groupController.getById(req,res,Group))
+
+// @route POST api/v1/groups/checkJoined
+// @desc Check if a learner is joined a group
+// @access Private
+router.post('/checkJoined', auth, (req,res) => groupController.checkJoined(req,res,Group))
+
+// @route POST api/v1/groups/join
+// @desc a learner joins a group
+// @access Private
+router.post('/join', auth, (req,res) => groupController.join(req,res,Learner,Group))
+
+// @route GET api/v1/groups/getGroups/:courseid
+// @desc Get groups based on a specific course
+// @access Public
+router.post('/getGroups/:courseid', (req,res) => groupController.getGroupsByCourseId(req,res,Group))
+
 module.exports = router;
