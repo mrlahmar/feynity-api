@@ -44,4 +44,9 @@ router.post('/join', auth, (req,res) => groupController.join(req,res,Learner,Gro
 // @access Public
 router.get('/getGroups/:courseid', (req,res) => groupController.getGroupsByCourseId(req,res,Group))
 
+// @route DELETE api/v1/groups/leave
+// @desc a user leaves a group
+// @access Private
+router.delete('/leave', auth ,(req,res) => groupController.leave(req,res,Group))
+
 module.exports = router;

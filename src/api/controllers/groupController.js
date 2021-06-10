@@ -43,6 +43,10 @@ const join = async (req,res,Learner,Group) => {
     await groupServices.joinGroup(req,res,Learner,Group)
 }
 
+// a learner leaves a group
+const leave = async (req,res,Group) => {
+    await groupServices.leaveGroup(req,res,Group)
+}
 module.exports = {
-    create, showMyGroups, getall, getById, checkJoined, getGroupsByCourseId, join
+    create, showMyGroups, getall, getById, checkJoined, getGroupsByCourseId, join, leave
 }

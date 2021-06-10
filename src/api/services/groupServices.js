@@ -191,5 +191,47 @@ const getCourseGroups = async (req,res,Group) => {
     }
 }
 
+// leaving a group
+const leaveGroup = async (req,res,Group) => {
+    const {groupid} = req.body
+    try {
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:JOINED]->(g:Group) WHERE l.email= $email AND g.id = $groupid DELETE r',
+            {
+                email: req.learner.email,
+                groupid: groupid
+            }
+        )
+
+        if (result.records.map(group => group.get('g').properties).length === 0) {
+            
+            // update group number of members
+            const nmembers_old = await Group.findOne({
+                where: {
+                    id: groupid
+                }
+            })
+
+            const number_of_members = nmembers_old.dataValues.number_of_members - 1
+            await Group.update(
+                {
+                    number_of_members
+                },
+                {
+                    where: {
+                        id: groupid
+                    }
+                }
+            )
+            return res.status(200).json({deleted: true})
+        } else {
+            return res.status(401).json({deleted: false})
+        }
+        
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"}) 
+    }
+}
+
 module.exports = {createGroup, myGroups, fetchGroups,
-    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups}
+    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups, leaveGroup}
