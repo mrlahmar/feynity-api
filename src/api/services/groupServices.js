@@ -123,6 +123,19 @@ const joinGroup = async (req,res,Learner,Group) => {
     const {groupid} = req.body
 
     try {
+        // check if he took the course
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:TOOK]->(c:Course) WHERE l.email = $email AND c.id = $id RETURN r',
+            {
+                email: req.learner.email,
+                id: req.body.courseid
+            }
+        )
+
+        if (result.records.map(rel => rel.get('r').properties).length === 0) {
+            return res.status(403).json({msg: "Forbidden"})
+        }
+
         // add relation
         const rel = await Learner.relateTo(
             {
@@ -163,4 +176,20 @@ const joinGroup = async (req,res,Learner,Group) => {
     }
 }
 
-module.exports = {createGroup, myGroups, fetchGroups, fetchGroupById, checkLearnerJoined, joinGroup}
+const getCourseGroups = async (req,res,Group) => {
+    const id = parseInt(req.params.courseid)
+    try {
+        const result = await queryRunner.run(
+            'MATCH (g:Group)-[r:BASED]->(c:Course) WHERE c.id = $id RETURN g',
+            {
+                id
+            }
+        )
+        return res.status(200).json(result.records.map(group => group.get('g').properties))
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"})   
+    }
+}
+
+module.exports = {createGroup, myGroups, fetchGroups,
+    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups}

@@ -34,8 +34,8 @@ const checkJoined = async (req,res,Group) => {
 }
 
 // get the groups of a specific course
-const getGroupsByCourseId = async () => {
-
+const getGroupsByCourseId = async (req,res,Group) => {
+    await groupServices.getCourseGroups(req,res,Group)
 }
 
 // a learner joins a group

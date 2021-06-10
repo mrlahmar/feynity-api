@@ -42,6 +42,6 @@ router.post('/join', auth, (req,res) => groupController.join(req,res,Learner,Gro
 // @route GET api/v1/groups/getGroups/:courseid
 // @desc Get groups based on a specific course
 // @access Public
-router.post('/getGroups/:courseid', (req,res) => groupController.getGroupsByCourseId(req,res,Group))
+router.get('/getGroups/:courseid', (req,res) => groupController.getGroupsByCourseId(req,res,Group))
 
 module.exports = router;
