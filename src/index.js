@@ -14,6 +14,7 @@ app.use(cors())
 app.use('/api/v1/learners', require('./api/routes/learners'))
 app.use('/api/v1/courses', require('./api/routes/courses'))
 app.use('/api/v1/groups', require('./api/routes/groups'))
+app.use('/api/v1/posts', require('./api/routes/posts'))
 /*app.use('/api/v1/challenges', require('./api/routes/challenges')) */
 
 app.listen(port, () => {

@@ -1,7 +1,7 @@
 const postServices = require('../services/postServices')
 
-const create = async (req,res,Post,Group) => {
-    await postServices.createPost(req,res,Post,Group)
+const create = async (req,res,Post,Learner) => {
+    await postServices.createPost(req,res,Post,Learner)
 }
 
 const deletePost = async (req,res,Post,Group) => {

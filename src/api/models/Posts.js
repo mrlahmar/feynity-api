@@ -2,7 +2,7 @@ const config = require('../../config/dbConfig')
 const { Groups } = require('./Groups');
 
 const Posts = config.ModelFactory({
-    label: 'Group',
+    label: 'Post',
     schema: {
         id: {
             type: 'number',
@@ -18,6 +18,10 @@ const Posts = config.ModelFactory({
             required: true
         },
         author: {
+            type: 'string',
+            required: true
+        },
+        posttime: {
             type: 'string',
             required: true
         },
