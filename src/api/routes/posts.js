@@ -21,4 +21,14 @@ router.post('/create', auth ,(req,res) => postController.create(req,res,Post,Lea
 // @access Private
 router.delete('/delete', auth ,(req,res) => postController.deletePost(req,res,Post,Group))
 
+// @route POST api/v1/posts/groupfeed
+// @desc Get a group posts
+// @access Private
+router.post('/groupfeed', auth ,(req,res) => postController.groupFeed(req,res,Post))
+
+// @route POST api/v1/posts/feed
+// @desc Get posts on all groups I joined
+// @access Private
+router.post('/feed', auth ,(req,res) => postController.learnerFeed(req,res,Post))
+
 module.exports = router;
