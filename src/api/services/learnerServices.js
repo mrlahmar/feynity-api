@@ -112,7 +112,8 @@ const deleteLearner = async (req,res,Learner) => {
         const result = await Learner.delete({
             where: {
                 email: req.learner.email
-            }
+            },
+            detach: true
         })
 
         if(result === 0) {

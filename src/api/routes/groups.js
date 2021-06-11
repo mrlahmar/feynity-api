@@ -49,4 +49,9 @@ router.get('/getGroups/:courseid', (req,res) => groupController.getGroupsByCours
 // @access Private
 router.delete('/leave', auth ,(req,res) => groupController.leave(req,res,Group))
 
+// @route DELETE api/v1/groups/delete
+// @desc a user deletes the group he created
+// @access Private
+router.delete('/delete', auth ,(req,res) => groupController.deleteGroup(req,res,Group))
+
 module.exports = router;

@@ -233,5 +233,28 @@ const leaveGroup = async (req,res,Group) => {
     }
 }
 
+// delete the group 
+const deleteTheGroup = async (req,res,Group) => {
+    const {groupid, groupcreator} = req.body
+
+    if (groupcreator !== req.learner.email) {
+        return res.status(403).json({msg: "Forbidden"})
+    }
+
+    try {
+        const result = await Group.delete({
+            where: {
+                id: groupid
+            },
+            detach: true
+        })
+
+        return res.status(200).json({deleted: true})
+        
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"}) 
+    }
+}
+
 module.exports = {createGroup, myGroups, fetchGroups,
-    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups, leaveGroup}
+    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups, leaveGroup, deleteTheGroup}

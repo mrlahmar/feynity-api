@@ -205,6 +205,14 @@ const removeTookCourse = async (req,res,Learner,Course) => {
             }
         )
 
+        await queryRunner.run(
+            'MATCH (l:Learner)-[r:JOINED]->(g:Group) WHERE l.email = $email AND g.courseid = $id DELETE r RETURN l,g',
+            {
+                email: req.learner.email,
+                id: req.body.id
+            }
+        )
+
         // update course number of students
         const nstudents_old = await Course.findOne({
             where: {
