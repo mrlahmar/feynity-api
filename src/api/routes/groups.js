@@ -54,4 +54,9 @@ router.delete('/leave', auth ,(req,res) => groupController.leave(req,res,Group))
 // @access Private
 router.delete('/delete', auth ,(req,res) => groupController.deleteGroup(req,res,Group))
 
+// @route POST api/v1/groups/members
+// @desc get group members
+// @access Private
+router.post('/members', auth, (req,res) => groupController.allmembers(req,res))
+
 module.exports = router;

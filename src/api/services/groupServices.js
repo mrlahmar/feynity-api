@@ -256,5 +256,24 @@ const deleteTheGroup = async (req,res,Group) => {
     }
 }
 
+
+// get all members
+const fetchAllMembers = async (req,res) => {
+    try {
+        const result = await queryRunner.run(
+            'MATCH (l:Learner)-[r:JOINED]->(g:Group) WHERE g.id = $id RETURN l',
+            {
+                id: req.body.groupid
+            }
+        )
+
+        return res.status(200).json(result.records.map(learner => learner.get('l').properties))
+        
+    } catch (error) {
+        return res.status(500).json({msg: "Something went wrong"}) 
+    }
+}
+
 module.exports = {createGroup, myGroups, fetchGroups,
-    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups, leaveGroup, deleteTheGroup}
+    fetchGroupById, checkLearnerJoined, joinGroup, getCourseGroups,
+    leaveGroup, deleteTheGroup, fetchAllMembers}

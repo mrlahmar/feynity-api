@@ -48,10 +48,16 @@ const leave = async (req,res,Group) => {
     await groupServices.leaveGroup(req,res,Group)
 }
 
+// delete a group
 const deleteGroup = async (req,res,Group) => {
     await groupServices.deleteTheGroup(req,res,Group)
 }
 
+// fetch all members
+const allmembers = async (req,res) => {
+    await groupServices.fetchAllMembers(req,res)
+}
+
 module.exports = {
-    create, showMyGroups, getall, getById, checkJoined, getGroupsByCourseId, join, leave, deleteGroup
+    create, showMyGroups, getall, getById, checkJoined, getGroupsByCourseId, join, leave, deleteGroup, allmembers
 }
