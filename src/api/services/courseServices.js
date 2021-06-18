@@ -171,10 +171,14 @@ const fetchMyCoursesWithProgress = async (req,res,Learner,Course) => {
 }
 
 const updateCourseProgress = async (req,res,Learner,Course) => {
+    const {progress} = req.body
+    const completed = progress === 100 ? true : false
+
     try {
         const result = await Learner.updateRelationship(
             {
-                progress: req.body.progress
+                progress,
+                completed
             },
             {
                 alias: 'Courses',

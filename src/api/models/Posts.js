@@ -21,6 +21,10 @@ const Posts = config.ModelFactory({
             type: 'string',
             required: true
         },
+        authorname: {
+            type: 'string',
+            required: true
+        },
         posttime: {
             type: 'string',
             required: true

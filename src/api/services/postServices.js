@@ -2,7 +2,7 @@ const {queryRunner} = require('../../config/dbConfig')
 
 const createPost = async (req,res,Post,Learner) => {
     // retrieve data
-    const {title, content, group, groupid} = req.body
+    const {title, content, group, groupid, authorname} = req.body
 
     try {
         // fetch all posts to get the max
@@ -16,6 +16,7 @@ const createPost = async (req,res,Post,Learner) => {
             title,
             content,
             author: req.learner.email,
+            authorname,
             posttime: Date.now().toString(),
             group,
             groupid

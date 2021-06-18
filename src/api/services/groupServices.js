@@ -10,10 +10,10 @@ const createGroup = async (req,res,Group,Learner,Course) => {
         // fetch all group to get the max(id)
         const results = await Group.findMany()
         // parse data
-        let groups = results.map(results => results.dataValues)
+        const max = Math.max.apply(Math, results.map(results => results.dataValues.id))
         // create a new group
         const group = await Group.createOne({
-            id: groups.length + 1,
+            id: max + 1,
             name: groupname,
             description,
             course: coursename,
@@ -26,7 +26,7 @@ const createGroup = async (req,res,Group,Learner,Course) => {
             alias: 'Courses',
             where: {
                 source: {
-                    id: groups.length + 1
+                    id: max + 1
                 },
                 target: {
                     id: courseid
@@ -41,7 +41,7 @@ const createGroup = async (req,res,Group,Learner,Course) => {
                     email: req.learner.email
                 },
                 target: {
-                    id: groups.length + 1
+                    id: max + 1
                 }
             }
         })
