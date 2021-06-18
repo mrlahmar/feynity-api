@@ -19,7 +19,7 @@ router.post('/create', auth ,(req,res) => postController.create(req,res,Post,Lea
 // @route DELETE api/v1/posts/delete
 // @desc Delete a post
 // @access Private
-router.delete('/delete', auth ,(req,res) => postController.deletePost(req,res,Post,Group))
+router.delete('/delete', auth ,(req,res) => postController.deletePost(req,res,Post,Learner))
 
 // @route POST api/v1/posts/groupfeed
 // @desc Get a group posts

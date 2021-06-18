@@ -46,6 +46,24 @@ const createPost = async (req,res,Post,Learner) => {
             }
         })
         
+        // get user 
+        const learner = await Learner.findOne({
+            where: {
+                email: req.learner.email
+            }
+        })
+
+        // update profile points
+        await Learner.update(
+            {
+                points: learner.dataValues.points + 10
+            },
+            {
+                where: {
+                    email: req.learner.email
+                }
+            }
+        )
        return res.status(200).json({msg: "Post created successfully", post: post.dataValues})
 
     } catch(e) {
@@ -54,7 +72,7 @@ const createPost = async (req,res,Post,Learner) => {
     }
 }
 
-const deleteThePost = async (req,res,Post,Group) => {
+const deleteThePost = async (req,res,Post,Learner) => {
     if (req.learner.email !== req.body.postcreator) {
         return res.status(403).json({msg:'Forbidden'})
     }
@@ -67,6 +85,26 @@ const deleteThePost = async (req,res,Post,Group) => {
             },
             detach: true
         })
+
+        // get user 
+        const learner = await Learner.findOne({
+            where: {
+                email: req.learner.email
+            }
+        })
+
+        // update profile points
+        await Learner.update(
+            {
+                points: learner.dataValues.points - 10
+            },
+            {
+                where: {
+                    email: req.learner.email
+                }
+            }
+        )
+       retu
 
         return res.status(200).json({deleted: true})
     } catch(e) {
